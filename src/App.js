@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-
+import Table from './components/Table'
 import PaginationSelector from './components/PaginationSelector';
 import PlatformCard from './components/PlatformCard';
+import Header from './components/Header';
 
 function App() {
   const headers = ["Nombre", "Email", "Cantidad de suscripciones", "Periodicidad", "Ultimo pago", "Proximo pago", "Total a pagar"]
@@ -25,7 +26,6 @@ function App() {
   }, [pagination]);
 
   const handlePageChange = (e) => {
-    console.log("clicked", e)
     setPagination({ ...pagination, page: e })
   }
   const handleLimitChange = (e) => {
@@ -34,63 +34,35 @@ function App() {
 
   return (
     <>
-      <header>
-        <h2>Proximos pagos</h2>
-      </header>
+      <Header title="Proximos pagos" />
       <div className="container">
         <div className="card">
-          <table className="table-users">
-            <Header titles={headers} />
+          <Table>
+            <Table.Header titles={headers} />
             {userPayments.map((item, index) => (
-              <ExpansibleRow
+              <Table.ExpansibleRow
                 key={index}
                 detail={item.platforms}
                 onDetail={(platforms) => <PlatformRow platforms={platforms} />}
-                render={<Columns data={item} />}
+                render={<Table.Columns data={item} />}
               />
             ))
             }
-              <Footer>
-                <PaginationSelector page={pagination.page} totalPages={pagination.totalPages} onPageChange={handlePageChange} onLimitChange={handleLimitChange} />
-              </Footer>
-          </table>
+            <Table.Footer>
+              <PaginationSelector
+                page={pagination.page}
+                totalPages={pagination.totalPages}
+                onPageChange={handlePageChange}
+                onLimitChange={handleLimitChange}
+              />
+            </Table.Footer>
+          </Table>
         </div>
       </div>
     </>
   )
 }
-const Header = ({ titles, ...rest }) =>
-  titles.length > 0 &&
-  titles.map((title, index) =>
-    <th key={index} {...rest}>{title}</th>
-  )
 
-const Footer = ({ children }) => (
-  <tr>
-    <td>
-      {children}
-    </td>
-  </tr>
-)
-const Columns = ({ data }) => (
-  <>
-    {Object.values(data).map((column, index) => typeof column !== 'object' && <td key={index}>{column}</td>)}
-  </>
-)
-const ExpansibleRow = ({ detail, onDetail, render }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  return (
-    <>
-      <tr>
-        {render}
-        <td>
-          <span className="expansible-row-button material-icons" onClick={() => setIsOpen(!isOpen)}>expand_more</span>
-        </td>
-      </tr>
-      {isOpen && onDetail(detail)}
-    </>
-  )
-}
 
 const PlatformRow = ({ platforms }) => (
   <tr>

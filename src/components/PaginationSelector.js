@@ -3,14 +3,14 @@ import "./PaginationSelector.css"
 
 const PaginationSelector = ({ page, totalPages, onPageChange, onLimitChange }) => {
     const handlePageChange = (e) => {
-        if(e.target.id === "back") {
-            if(page > 0) {
+        if (e.target.id === "back") {
+            if (page > 0) {
                 return onPageChange(page - 1)
             }
             return
         }
-        if(e.target.id === "forward") {
-            if(page < totalPages) {
+        if (e.target.id === "forward") {
+            if (page < totalPages) {
                 return onPageChange(page + 1)
             }
             return

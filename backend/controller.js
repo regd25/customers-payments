@@ -39,11 +39,11 @@ exports.getUserPayments = async (req, res, next) => {
 
         users = users.map(user => {
             let nextPayment = 0
-            if(user.platforms) user.platforms.forEach(platform => nextPayment += platform.monthlyPrice)
+            if (user.platforms) user.platforms.forEach(platform => nextPayment += platform.monthlyPrice)
             const today = new Date()
             let nextPaymentDate = today
             if (user.isQuincenal) {
-                nextPayment =  nextPayment/2
+                nextPayment = nextPayment / 2
                 if (today.getDate <= 15) {
                     nextPaymentDate = today.setDate(15)
                 } else {
@@ -58,7 +58,7 @@ exports.getUserPayments = async (req, res, next) => {
                 }
             }
 
-            nextPaymentDate =  permittedDaysFilter(nextPaymentDate, hollidays)
+            nextPaymentDate = permittedDaysFilter(nextPaymentDate, hollidays)
             return {
                 ...user,
                 nextPayment,
